@@ -1,0 +1,49 @@
+name: Issue Priority Bot
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no labels applied)'
+        type: boolean
+        default: false
+      max_issues:
+        description: 'Maximum issues to process'
+        type: number
+        default: 100
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  prioritize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .github/scripts
+
+      - name: Run Issue Prioritization
+        uses: actions/github-script@v7
+        env:
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        with:
+          script: |
+            const { prioritizeIssues } = require('./.github/scripts/prioritize-issues.js');
+
+            await prioritizeIssues(github, context, {
+              maxIssues: parseInt('${{ inputs.max_issues }}') || 100,
+              dryRun: process.env.DRY_RUN === 'true'
+            });

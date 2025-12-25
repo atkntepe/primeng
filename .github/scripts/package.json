@@ -1,0 +1,25 @@
+{
+  "name": "prime-triage-bot",
+  "version": "1.0.0",
+  "description": "AI-powered triage bot for Prime UI libraries (PrimeNG, PrimeVue, PrimeReact, etc.)",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "primeng",
+    "primevue",
+    "primereact",
+    "triage",
+    "github",
+    "automation",
+    "ai"
+  ],
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@octokit/rest": "^22.0.1",
+    "dotenv": "^17.2.3"
+  }
+}
